@@ -12,9 +12,49 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "best_sellers_bNxtN9": {
+      "type": "best-sellers",
+      "blocks": {
+        "collection_block_yrm3Lw": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "mantra-rings",
+            "collection_title": "",
+            "product": ""
+          }
+        },
+        "collection_block_4pW9XH": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "charitybands®",
+            "collection_title": "",
+            "product": "butterfly-hope-and-rebirth"
+          }
+        },
+        "collection_block_3H4pzx": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "inspirational-bracelets",
+            "collection_title": "",
+            "product": "save-lives-band"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_yrm3Lw",
+        "collection_block_4pW9XH",
+        "collection_block_3H4pzx"
+      ],
+      "name": "Best Sellers",
+      "settings": {
+        "section_label": "Best sellers",
+        "title": "Trending Products"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "best_sellers_bNxtN9"
   ]
 }
