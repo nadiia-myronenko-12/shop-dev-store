@@ -12,9 +12,49 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "best_sellers_fmJx8H": {
+      "type": "best-sellers",
+      "blocks": {
+        "collection_block_ezWpNg": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "mantra-rings",
+            "collection_title": "",
+            "product": "calm-mind-ring"
+          }
+        },
+        "collection_block_epmVeA": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "charitybands®",
+            "collection_title": "",
+            "product": ""
+          }
+        },
+        "collection_block_wNmA39": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "inspirational-bracelets",
+            "collection_title": "",
+            "product": "believe-bracelet"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_ezWpNg",
+        "collection_block_epmVeA",
+        "collection_block_wNmA39"
+      ],
+      "name": "Best Sellers",
+      "settings": {
+        "section_label": "Best sellers",
+        "title": "Trending Products"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "best_sellers_fmJx8H"
   ]
 }
