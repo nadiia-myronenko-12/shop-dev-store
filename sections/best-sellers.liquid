@@ -618,7 +618,7 @@
       document.body.classList.remove('best-sellers__popup--open');
     }
 
-    addToCart(variantId){
+    async addToCart(variantId){
       let formData = {
         'items': [{
           'id': variantId,
@@ -626,25 +626,25 @@
         }]
       };
 
-      fetch(window.Shopify.routes.root + 'cart/add.js', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(response => {
+      try {
+        const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
         if (!response.ok) {
           throw new Error(`Error response: ${response.status}`);
         }
-        return response.json();
-      })
-      .then(() => {       
+
+        const data = await response.json();
+
         this.showPopup('Product added to cart!');
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      } catch(e) {
+        alert(`Error: ${e}`);
+      }
     }
   }
 
