@@ -409,6 +409,7 @@
     top: 8px;
     right: 8px;
     z-index: 10;
+    cursor: pointer;
   }
 
   .best-sellers__popup-content {
@@ -534,36 +535,45 @@
     }
 
     connectedCallback() {
+      this.collectionsContainer = this.querySelector('.best-sellers__collections');
+      this.productsContainer = this.querySelector('.best-sellers__products');
+
       this.collectionButtons = this.querySelectorAll('.best-sellers__collection');
       this.productsBlocks = this.querySelectorAll('.best-sellers__product');
 
       this.overlay = this.querySelector('.best-sellers__overlay');
       this.popup = this.querySelector('.best-sellers__popup');
-      this.wishlistButtons = this.querySelectorAll('.best-sellers__action-wishlist');
       this.popupCloseButton = this.querySelector('.best-sellers__popup-close');
-
-      this.addToCartButtons = this.querySelectorAll('.best-sellers__action-add-to-cart');
 
       this.initEventsListeners();
     }
 
     initEventsListeners() {
-      if (this.collectionButtons) {
-        this.collectionButtons.forEach(button => {
-          button.addEventListener('click', (event) => {
-            const blockId = event.currentTarget.dataset.blockId;
+      if (this.collectionsContainer) {
+        this.collectionsContainer.addEventListener('click', (event) => {
+          const clickedButton = event.target.closest('.best-sellers__collection');
+          if (clickedButton) {
+            const blockId = clickedButton.dataset.blockId;
             this.showActiveBestSeller(blockId);
-          })
+          }
         });
       }
 
-      if (this.wishlistButtons) {
-        this.wishlistButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const productTitle = button.dataset.productTitle;
-            const message = `"${productTitle}" has been added to the your wishlist.`
-            this.showPopup(message)
-          })
+      if (this.productsContainer) {
+        this.productsContainer.addEventListener('click', (event) => {
+          const clickedButton = event.target.closest('button');
+          
+          if (clickedButton) {
+            if (clickedButton.classList.contains('best-sellers__action-wishlist')) {
+              const productTitle = clickedButton.dataset.productTitle;
+              const message = `"${productTitle}" has been added to the your wishlist.`
+              this.showPopup(message)
+            }
+            else if (clickedButton.classList.contains('best-sellers__action-add-to-cart')) {
+              const variantId = clickedButton.dataset.variantId;
+              this.addToCart(variantId)
+            }
+          }
         });
       }
 
@@ -574,15 +584,6 @@
       if (this.overlay) {
         this.overlay.addEventListener('click', () => this.closePopup());
       }
-
-      if (this.addToCartButtons) {
-        this.addToCartButtons.forEach(button => {
-          button.addEventListener('click', (event) => {
-            const variantId = event.currentTarget.dataset.variantId;
-            this.addToCart(variantId)
-          })
-        })
-      }
     }
 
     showActiveBestSeller(blockId) {
@@ -591,7 +592,7 @@
         button.classList.toggle(
           'best-sellers__collection--active',
           isActive
-        )
+        );
         button.setAttribute('aria-selected', isActive);
       });
 
@@ -599,12 +600,12 @@
         block.classList.toggle(
           'best-sellers__product--hidden',
           block.dataset.blockId !== blockId
-        )
+        );
       });
     }
 
     showPopup(message){
-      const popupMessageContainer = this.querySelector('.best-sellers__popup-text');
+      const popupMessageContainer = this.popup.querySelector('.best-sellers__popup-text');
       popupMessageContainer.textContent = message;
 
       this.popup.classList.add('best-sellers__popup--active');
@@ -618,7 +619,7 @@
       document.body.classList.remove('best-sellers__popup--open');
     }
 
-    addToCart(variantId){
+    async addToCart(variantId){
       let formData = {
         'items': [{
           'id': variantId,
@@ -626,25 +627,25 @@
         }]
       };
 
-      fetch(window.Shopify.routes.root + 'cart/add.js', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(response => {
+      try {
+        const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
         if (!response.ok) {
           throw new Error(`Error response: ${response.status}`);
         }
-        return response.json();
-      })
-      .then(() => {       
+
+        const data = await response.json();
+
         this.showPopup('Product added to cart!');
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      } catch(e) {
+        alert(`Error: ${e}`);
+      }
     }
   }
 
