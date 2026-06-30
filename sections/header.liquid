@@ -8,17 +8,50 @@
       {%- for link in section.settings.menu.links -%}
         <a
           href="{{ link.url }}"
-          class="site-header__nav-link{%- if link.active %} site-header__nav-link--active{%- endif -%}">
+          class="site-header__nav-link{%- if link.active %} site-header__nav-link--active{%- endif -%}"
+        >
           {{- link.title -}}
         </a>
       {%- endfor -%}
     </nav>
 
     <div class="site-header__actions">
+      <button
+        class="site-header__icon-btn site-header__search-btn"
+        aria-label="Search"
+        aria-expanded="false"
+        aria-controls="site-header-search"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+
       {%- if shop.customer_accounts_enabled -%}
         <shopify-account menu="{{ section.settings.customer_account_menu }}">
           <a href="{{ routes.account_url }}" class="site-header__icon-btn" aria-label="Account">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
@@ -29,8 +62,19 @@
       <a
         href="{{ routes.cart_url }}"
         class="site-header__icon-btn site-header__cart-btn"
-        aria-label="Cart, {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        aria-label="Cart, {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
           <path d="M16 10a4 4 0 0 1-8 0"/>
@@ -38,15 +82,29 @@
         <span
           class="site-header__cart-badge"
           aria-hidden="true"
-          data-count="{{ cart.item_count }}">{{ cart.item_count }}</span>
+          data-count="{{ cart.item_count }}"
+        >
+          {{- cart.item_count -}}
+        </span>
       </a>
 
       <button
         class="site-header__icon-btn site-header__hamburger"
         aria-label="Open navigation menu"
         aria-expanded="false"
-        aria-controls="site-mobile-nav">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        aria-controls="site-mobile-nav"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <line x1="3" y1="6" x2="21" y2="6"/>
           <line x1="3" y1="12" x2="21" y2="12"/>
           <line x1="3" y1="18" x2="21" y2="18"/>
@@ -55,14 +113,94 @@
     </div>
   </div>
 
-  <div class="site-header__drawer" id="site-mobile-nav" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="site-header__search" id="site-header-search" aria-hidden="true">
+    <form
+      role="search"
+      action="{{ routes.search_url }}"
+      method="get"
+      class="site-header__search-form"
+    >
+      <input type="hidden" name="type" value="product">
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        class="site-header__search-input"
+        placeholder="Search products"
+        aria-label="Search products"
+        tabindex="-1"
+      >
+      <button
+        type="submit"
+        class="site-header__icon-btn site-header__search-submit"
+        aria-label="Submit search"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="site-header__icon-btn site-header__search-close"
+        aria-label="Close search"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <div
+    class="site-header__drawer"
+    id="site-mobile-nav"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Navigation"
+  >
     <div class="site-header__drawer-panel">
       <div class="site-header__drawer-top">
         <a href="{{ routes.root_url }}" class="site-header__logo" tabindex="-1">
           {{- shop.name -}}
         </a>
-        <button class="site-header__icon-btn site-header__drawer-close" aria-label="Close navigation menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button
+          class="site-header__icon-btn site-header__drawer-close"
+          aria-label="Close navigation menu"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
@@ -88,8 +226,12 @@
     top: 0;
     z-index: 100;
     background: #fff;
-    border-bottom: 1px solid #DCDCDC;
+    border-bottom: 1px solid #dcdcdc;
     font-family: 'Inter', sans-serif;
+  }
+
+  .site-header {
+    grid-column: 1 / -1;
   }
 
   .site-header__bar {
@@ -128,14 +270,16 @@
     text-decoration: none;
     padding: 6px 12px;
     border-radius: 8px;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
     white-space: nowrap;
   }
 
   .site-header__nav-link:hover,
   .site-header__nav-link--active {
     color: #000;
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
   }
 
   /* ── Icon buttons (shared) ── */
@@ -165,7 +309,7 @@
   }
 
   .site-header__icon-btn:hover {
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
   }
 
   /* ── Cart badge ── */
@@ -177,7 +321,7 @@
     min-width: 16px;
     height: 16px;
     padding: 0 4px;
-    background: #E41616;
+    background: #e41616;
     color: #fff;
     font-size: 10px;
     font-weight: 600;
@@ -188,8 +332,64 @@
     pointer-events: none;
   }
 
-  .site-header__cart-badge:not([data-count="0"]) {
+  .site-header__cart-badge:not([data-count='0']) {
     display: flex;
+  }
+
+  /* ── Search panel ── */
+  .site-header__search {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-height 0.25s ease,
+      opacity 0.2s ease;
+  }
+
+  .site-header__search[aria-hidden='false'] {
+    max-height: 88px;
+    opacity: 1;
+  }
+
+  .site-header__search-form {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-header__search-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    background: #fff;
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .site-header__search-input::placeholder {
+    color: #9d9d9d;
+  }
+
+  .site-header__search-input:focus {
+    border-color: #000;
+  }
+
+  .site-header__search-submit,
+  .site-header__search-close {
+    flex-shrink: 0;
   }
 
   /* ── Mobile drawer ── */
@@ -202,7 +402,7 @@
     visibility: hidden;
   }
 
-  .site-header__drawer[aria-hidden="false"] {
+  .site-header__drawer[aria-hidden='false'] {
     pointer-events: auto;
     visibility: visible;
   }
@@ -221,7 +421,7 @@
     overflow-y: auto;
   }
 
-  .site-header__drawer[aria-hidden="false"] .site-header__drawer-panel {
+  .site-header__drawer[aria-hidden='false'] .site-header__drawer-panel {
     transform: translateX(0);
   }
 
@@ -232,7 +432,7 @@
     transition: opacity 0.3s ease;
   }
 
-  .site-header__drawer[aria-hidden="false"] .site-header__drawer-backdrop {
+  .site-header__drawer[aria-hidden='false'] .site-header__drawer-backdrop {
     opacity: 1;
   }
 
@@ -241,7 +441,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    border-bottom: 1px solid #DCDCDC;
+    border-bottom: 1px solid #dcdcdc;
     flex-shrink: 0;
   }
 
@@ -265,7 +465,7 @@
   }
 
   .site-header__drawer-link:hover {
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
   }
 
   /* ── Desktop breakpoint ── */
@@ -300,18 +500,35 @@
       this.backdrop = this.querySelector('.site-header__drawer-backdrop');
       this.drawerLinks = this.querySelectorAll('.site-header__drawer-link');
 
+      this.searchBtn = this.querySelector('.site-header__search-btn');
+      this.searchClose = this.querySelector('.site-header__search-close');
+      this.searchPanel = this.querySelector('.site-header__search');
+      this.searchInput = this.querySelector('.site-header__search-input');
+
       this.hamburger?.addEventListener('click', () => this.openDrawer());
       this.closeBtn?.addEventListener('click', () => this.closeDrawer());
       this.backdrop?.addEventListener('click', () => this.closeDrawer());
+
+      this.searchBtn?.addEventListener('click', () => this.toggleSearch());
+      this.searchClose?.addEventListener('click', () => this.closeSearch());
+
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') this.closeDrawer();
+        if (e.key !== 'Escape') return;
+        this.closeDrawer();
+        this.closeSearch();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!this.searchPanel || this.searchPanel.getAttribute('aria-hidden') === 'true') return;
+        if (this.searchPanel.contains(e.target) || this.searchBtn?.contains(e.target)) return;
+        this.closeSearch();
       });
     }
 
     openDrawer() {
       this.drawer.setAttribute('aria-hidden', 'false');
       this.hamburger.setAttribute('aria-expanded', 'true');
-      this.drawerLinks.forEach(link => link.removeAttribute('tabindex'));
+      this.drawerLinks.forEach((link) => link.removeAttribute('tabindex'));
       document.body.style.overflow = 'hidden';
       this.closeBtn?.focus();
     }
@@ -320,9 +537,31 @@
       if (this.drawer.getAttribute('aria-hidden') === 'true') return;
       this.drawer.setAttribute('aria-hidden', 'true');
       this.hamburger.setAttribute('aria-expanded', 'false');
-      this.drawerLinks.forEach(link => link.setAttribute('tabindex', '-1'));
+      this.drawerLinks.forEach((link) => link.setAttribute('tabindex', '-1'));
       document.body.style.overflow = '';
       this.hamburger?.focus();
+    }
+
+    toggleSearch() {
+      if (this.searchPanel.getAttribute('aria-hidden') === 'false') {
+        this.closeSearch();
+      } else {
+        this.openSearch();
+      }
+    }
+
+    openSearch() {
+      this.searchPanel.setAttribute('aria-hidden', 'false');
+      this.searchBtn.setAttribute('aria-expanded', 'true');
+      this.searchInput?.removeAttribute('tabindex');
+      requestAnimationFrame(() => this.searchInput?.focus());
+    }
+
+    closeSearch() {
+      if (!this.searchPanel || this.searchPanel.getAttribute('aria-hidden') === 'true') return;
+      this.searchPanel.setAttribute('aria-hidden', 'true');
+      this.searchBtn.setAttribute('aria-expanded', 'false');
+      this.searchInput?.setAttribute('tabindex', '-1');
     }
   }
 
