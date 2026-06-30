@@ -13,11 +13,11 @@
       "type": "hero",
       "settings": {
         "label": "New Collection · 2026",
-        "heading": "Wear What\nYou Believe In",
+        "heading": "Wear WhatYou Believe In",
         "subheading": "Mindful jewelry crafted for the ones who lead with intention.",
         "cta_primary_text": "Shop Now",
         "cta_primary_url": "/collections",
-        "cta_secondary_text": "View Collections",
+        "cta_secondary_text": "",
         "cta_secondary_url": "/collections"
       }
     },
@@ -58,7 +58,8 @@
         "trust_reviews",
         "trust_returns",
         "trust_secure"
-      ]
+      ],
+      "settings": {}
     },
     "collections_grid": {
       "type": "collections-grid",
@@ -66,13 +67,13 @@
         "col_1": {
           "type": "collection_card",
           "settings": {
-            "collection": "mantra-rings"
+            "collection": "charitybands®"
           }
         },
         "col_2": {
           "type": "collection_card",
           "settings": {
-            "collection": "charitybands®"
+            "collection": "statement-collection"
           }
         },
         "col_3": {
@@ -82,10 +83,17 @@
           }
         }
       },
-      "block_order": ["col_1", "col_2", "col_3"],
+      "block_order": [
+        "col_1",
+        "col_2",
+        "col_3"
+      ],
       "settings": {
         "label": "Shop by Category",
-        "heading": "Find Your Style"
+        "heading": "Find Your Style",
+        "show_all_collections": false,
+        "show_view_all": false,
+        "view_all_label": "View all collections"
       }
     },
     "best_sellers_fmJx8H": {
@@ -104,7 +112,7 @@
           "settings": {
             "collection": "charitybands®",
             "collection_title": "",
-            "product": ""
+            "product": "save-lives-band"
           }
         },
         "collection_block_wNmA39": {
@@ -112,7 +120,7 @@
           "settings": {
             "collection": "inspirational-bracelets",
             "collection_title": "",
-            "product": "believe-bracelet"
+            "product": "keep-going-bracelet"
           }
         }
       },
@@ -131,7 +139,7 @@
       "type": "featured-product",
       "settings": {
         "label": "Featured Pick",
-        "product": "calm-mind-ring",
+        "product": "hope-band",
         "badge_text": "Staff Pick"
       }
     },
