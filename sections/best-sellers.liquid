@@ -15,18 +15,28 @@
           {% assign collection_block = block.settings.collection %}
           {% if collection_block != blank %}
             {% if collection_block.products_count > 0 or block.settings.product != blank %}
-              <button class="best-sellers__collection {% if first_valid_collection %}best-sellers__collection--active{% endif %}" 
+              <button
+                class="best-sellers__collection {% if first_valid_collection %}best-sellers__collection--active{% endif %}"
                 data-block-id="{{ block.id }}"
                 role="tab"
-                aria-selected="{% if first_valid_collection %}true{% else %}false{% endif %}">
-                <h3 class="best-sellers__collection-label">{{ block.settings.collection_title | default: block.settings.collection.title | strip_html | strip }}</h3>
+                aria-selected="{% if first_valid_collection %}true{% else %}false{% endif %}"
+              >
+                <h3 class="best-sellers__collection-label">
+                  {{
+                    block.settings.collection_title
+                    | default: block.settings.collection.title
+                    | strip_html
+                    | strip
+                  }}
+                </h3>
                 <svg
                   class="best-sellers__collection-arrow"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path
                     d="M14.43 5.93005L20.5 12.0001L14.43 18.0701"
                     stroke="currentColor"
@@ -53,38 +63,62 @@
       {% assign first_valid_product = true %}
       {% for block in section.blocks %}
         {% assign current_collection = block.settings.collection %}
-        {% if current_collection != blank%}
+        {% if current_collection != blank %}
           {% if current_collection.products_count > 0 or block.settings.product != blank %}
-            {% assign current_product = block.settings.product | default: current_collection.products.first %}
-            <div class="best-sellers__product {% unless first_valid_product %} best-sellers__product--hidden {% endunless %}" data-block-id="{{ block.id }}">
+            {% assign current_product = block.settings.product
+              | default: current_collection.products.first
+            %}
+            <div
+              class="best-sellers__product {% unless first_valid_product %} best-sellers__product--hidden {% endunless %}"
+              data-block-id="{{ block.id }}"
+            >
               <div class="best-sellers__media-wrapper">
                 <a href="{{ current_product.url | url_escape }}" class="best-sellers__product-link">
                   {% if current_product and current_product.featured_image != blank %}
                     <picture class="best-sellers__picture">
-                        <source media="(max-width: 767px)" srcset="{{ current_product.featured_image | image_url: width: 343, height: 343, crop: 'center' }} 1x, 
-                                      {{ current_product.featured_image | image_url: width: 686, height: 686, crop: 'center' }} 2x">
-                        <source media="(min-width: 768px)" srcset="{{ current_product.featured_image | image_url: width: 816, height: 816, crop: 'center' }} 1x, 
-                                      {{ current_product.featured_image | image_url: width: 1632, height: 1632, crop: 'center' }} 2x">
-                        <img
-                          class="best-sellers__image"
-                          src="{{ current_product.featured_image | image_url: width: 816, height: 816, crop: 'center' }}"
-                          alt="{{ current_product.featured_image.alt | default: current_product.title | strip_html | strip }}"
-                          loading="lazy"
-                          width="816"
-                          height="816">
+                      <source
+                        media="(max-width: 767px)"
+                        srcset="
+                          {{ current_product.featured_image | image_url: width: 343, height: 343, crop: 'center' }} 1x,
+                          {{ current_product.featured_image | image_url: width: 686, height: 686, crop: 'center' }} 2x
+                        "
+                      >
+                      <source
+                        media="(min-width: 768px)"
+                        srcset="
+                          {{ current_product.featured_image | image_url: width: 816, height: 816, crop: 'center' }} 1x,
+                          {{ current_product.featured_image | image_url: width: 1632, height: 1632, crop: 'center' }} 2x
+                        "
+                      >
+                      <img
+                        class="best-sellers__image"
+                        src="{{ current_product.featured_image | image_url: width: 816, height: 816, crop: 'center' }}"
+                        alt="{{ current_product.featured_image.alt | default: current_product.title | strip_html | strip }}"
+                        loading="lazy"
+                        width="816"
+                        height="816"
+                      >
                     </picture>
                   {% else %}
                     {{ 'image' | placeholder_svg_tag }}
                   {% endif %}
                   <div class="best-sellers__product-info">
-                    <span class="best-sellers__product-title">{{ current_product.title |  strip_html | strip }}</span>
+                    <span class="best-sellers__product-title">
+                      {{- current_product.title | strip_html | strip -}}
+                    </span>
 
                     <div class="best-sellers__product-price-container">
                       {% if current_product.compare_at_price > current_product.price %}
-                        <span class="best-sellers__product-price best-sellers__product-price--new">{{ current_product.price | money }}</span>
-                        <span class="best-sellers__product-price best-sellers__product-price--old">{{ current_product.compare_at_price | money }}</span>
+                        <span class="best-sellers__product-price best-sellers__product-price--new">
+                          {{- current_product.price | money -}}
+                        </span>
+                        <span class="best-sellers__product-price best-sellers__product-price--old">
+                          {{- current_product.compare_at_price | money -}}
+                        </span>
                       {% else %}
-                        <span class="best-sellers__product-price">{{ current_product.price | money }}</span>
+                        <span class="best-sellers__product-price">
+                          {{- current_product.price | money -}}
+                        </span>
                       {% endif %}
                     </div>
                   </div>
@@ -93,21 +127,26 @@
                   <div class="best-sellers__tags">
                     {% for tag in current_product.tags limit: 3 %}
                       {% assign prepared_tag = tag | strip | downcase %}
-                      <span class="best-sellers__tag {% if prepared_tag == 'sale' %}best-sellers__tag--marked{% endif %}">{{ tag }}</span>
+                      <span class="best-sellers__tag {% if prepared_tag == 'sale' %}best-sellers__tag--marked{% endif %}">
+                        {{- tag -}}
+                      </span>
                     {% endfor %}
                   </div>
                 {% endif %}
                 <div class="best-sellers__actions">
-                  <button class="best-sellers__action best-sellers__action-wishlist"
+                  <button
+                    class="best-sellers__action best-sellers__action-wishlist"
                     aria-label="Add to wishlist"
                     data-product-id="{{ current_product.id }}"
-                    data-product-title="{{ current_product.title }}">
+                    data-product-title="{{ current_product.title }}"
+                  >
                     <svg
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
                         d="M20.84 4.61012C20.3292 4.09912 19.7228 3.69376 19.0554 3.4172C18.3879 3.14064 17.6725 2.99829 16.95 2.99829C16.2275 2.99829 15.5121 3.14064 14.8446 3.4172C14.1772 3.69376 13.5708 4.09912 13.06 4.61012L12 5.67012L10.94 4.61012C9.90831 3.57842 8.50903 2.99883 7.05 2.99883C5.59096 2.99883 4.19169 3.57842 3.16 4.61012C2.1283 5.64181 1.54871 7.04108 1.54871 8.50012C1.54871 9.95915 2.1283 11.3584 3.16 12.3901L4.22 13.4501L12 21.2301L19.78 13.4501L20.84 12.3901C21.351 11.8794 21.7564 11.2729 22.0329 10.6055C22.3095 9.93801 22.4518 9.2226 22.4518 8.50012C22.4518 7.77763 22.3095 7.06222 22.0329 6.39476C21.7564 5.7273 21.351 5.12087 20.84 4.61012V4.61012Z"
                         stroke="currentColor"
@@ -120,24 +159,34 @@
                     class="best-sellers__action best-sellers__action-add-to-cart"
                     aria-label="Add to cart"
                     data-variant-id="{{ current_product.selected_or_first_available_variant.id }}"
+                    data-product-title="{{ current_product.title | strip_html | strip | escape }}"
                     {% unless current_product.available %}
                       disabled
                       aria-disabled="true"
-                    {% endunless %}>
+                    {% endunless %}
+                  >
                     <svg
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
                       fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
                       <path
-                        d="M15.58 11.9999C15.58 13.9799 13.98 15.5799 12 15.5799C10.02 15.5799 8.42001 13.9799 8.42001 11.9999C8.42001 10.0199 10.02 8.41992 12 8.41992C13.98 8.41992 15.58 10.0199 15.58 11.9999Z"
+                        d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
                         stroke="currentColor"
                         stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round" />
                       <path
-                        d="M12 20.27C15.53 20.27 18.82 18.19 21.11 14.59C22.01 13.18 22.01 10.81 21.11 9.39997C18.82 5.79997 15.53 3.71997 12 3.71997C8.47 3.71997 5.18 5.79997 2.89 9.39997C1.99 10.81 1.99 13.18 2.89 14.59C5.18 18.19 8.47 20.27 12 20.27Z"
+                        d="M3 6h18"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round" />
+                      <path
+                        d="M16 10a4 4 0 0 1-8 0"
                         stroke="currentColor"
                         stroke-width="1.5"
                         stroke-linecap="round"
@@ -153,29 +202,13 @@
       {% endfor %}
     </div>
   </div>
-
-  <div class="best-sellers__overlay"></div>
-  <div class="best-sellers__popup" role="dialog" aria-modal="true">
-      <button class="best-sellers__popup-close" aria-label="Close popup">
-          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 50 50">
-            <path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"></path>
-          </svg>
-        </button>
-      <div class="best-sellers__popup-content">
-        <p class="best-sellers__popup-text"></p>
-      </div>
-  </div>
 </best-sellers>
 
 {% stylesheet %}
-  body.best-sellers__popup--open {
-    overflow: hidden;
-  }
-
   .best-sellers {
     grid-column: 1 / -1;
     width: 100%;
-    max-width: 1680px;
+    max-width: 1440px;
     margin: 0 auto;
     color: #000000;
     font-family: 'Inter', sans-serif;
@@ -192,7 +225,7 @@
   }
 
   .best-sellers__container {
-    padding: 32px 16px;
+    padding: 64px 16px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -214,11 +247,17 @@
     margin-bottom: 16px;
     line-height: 24px;
     color: #535353;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9d9d9d;
   }
 
   .best-sellers__title {
     font-size: 28px;
-    line-height: 34px;
+    font-weight: 700;
+    color: #000;
+    line-height: 1.2;
   }
 
   .best-sellers__collection {
@@ -227,12 +266,12 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-    padding: 24px 0 23px 0;
-    background-color: #FFFFFF;
+    padding: 24px 0 23px;
+    background-color: #ffffff;
     border: none;
-    border-bottom: 1px solid #DCDCDC;
+    border-bottom: 1px solid #dcdcdc;
     box-sizing: border-box;
-    color: #9D9D9D;
+    color: #9d9d9d;
   }
 
   .best-sellers__collection--active {
@@ -287,20 +326,19 @@
   .best-sellers__tag {
     display: inline-flex;
     padding: 8px 16px;
-    background-color: #FFFFFF;
-    border: 1px solid #DCDCDC;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
     border-radius: 8px;
     font-size: 14px;
     line-height: 18px;
     align-items: center;
     text-align: center;
-    height: 34px;
   }
 
   .best-sellers__tag--marked {
-    background-color: #E41616;
-    color: #FFFFFF;
-    border: 1px solid #E41616;
+    background-color: #e41616;
+    color: #ffffff;
+    border: 1px solid #e41616;
   }
 
   .best-sellers__actions {
@@ -318,8 +356,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #FFFFFF;
-    border: 1px solid #DCDCDC;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
     border-radius: 12px;
   }
 
@@ -333,7 +371,7 @@
     left: 8px;
     right: 8px;
     padding: 12px 16px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border-radius: 16px;
     display: flex;
     flex-wrap: wrap;
@@ -354,67 +392,20 @@
   }
 
   .best-sellers__product-price--new {
-    color: #E41616;
+    color: #e41616;
   }
 
   .best-sellers__product-price--old {
-    color: #9D9D9D;
+    color: #9d9d9d;
     text-decoration: line-through;
     line-height: 22px;
     font-weight: 400;
   }
 
-  /* Overlay */
-  .best-sellers__overlay {
-    display: none;
-  }
-
-  .best-sellers__overlay--active {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-
-  /* Popup */
-  .best-sellers__popup {
-    display: none;
-    width: 90%;
-    max-width: 450px;
-    padding: 8px;
-    background-color: #FFFFFF;
-    border: 1px solid #DCDCDC;
-    border-radius: 16px;
-  }
-
-  .best-sellers__popup--active {
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-  }
-
-  .best-sellers__popup-close {
-    background-color: #FFFFFF;
-    border: none;
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 10;
-    cursor: pointer;
-  }
-
-  .best-sellers__popup-content {
-    padding: 32px;
-    text-align: center;
+  /* Wishlist active state */
+  .best-sellers__action-wishlist--active svg path {
+    fill: #e41616;
+    stroke: #e41616;
   }
 
   @media screen and (min-width: 768px) {
@@ -422,17 +413,22 @@
       flex-direction: row;
       gap: 16px;
       align-items: center;
+      padding: 80px 24px;
     }
 
     .best-sellers__info {
-      padding: 0 24px;
+      padding: 0 16px;
     }
 
     .best-sellers__info,
     .best-sellers__products {
-      flex: 0 0 calc(50% - 8px); 
+      flex: 0 0 calc(50% - 8px);
       width: calc(50% - 8px);
       min-width: 0;
+    }
+
+    .best-sellers__title {
+      font-size: 36px;
     }
 
     .best-sellers__collection-label {
@@ -441,28 +437,25 @@
     }
   }
 
-
   @media screen and (min-width: 1440px) {
     .best-sellers__container {
-      align-items: flex-start;
+      padding: 100px 48px;
     }
 
     .best-sellers__info {
-      padding: 0 64px;
+      padding: 0 24px;
     }
 
     .best-sellers__header {
-      margin-top: 210px;
       margin-bottom: 64px;
     }
 
     .best-sellers__title {
-      font-size: 38px;
-      line-height: 46px;
+      font-size: 44px;
     }
 
     .best-sellers__collection {
-      padding: 24px 24px 23px 24px;
+      padding: 24px 24px 23px;
     }
 
     .best-sellers__collection-label {
@@ -499,13 +492,15 @@
       cursor: pointer;
     }
 
-    .best-sellers__collection:hover:not(.best-sellers__collection--active) .best-sellers__collection-label,
-    .best-sellers__collection:hover:not(.best-sellers__collection--active) .best-sellers__collection-arrow {
+    .best-sellers__collection:hover:not(.best-sellers__collection--active)
+      .best-sellers__collection-label,
+    .best-sellers__collection:hover:not(.best-sellers__collection--active)
+      .best-sellers__collection-arrow {
       transform: translateX(8px);
     }
 
     .best-sellers__product-link:hover .best-sellers__image {
-      transform: scale(1.1);
+      transform: scale(1.04);
     }
 
     .best-sellers__action:enabled:hover {
@@ -513,7 +508,7 @@
     }
 
     .best-sellers__action:enabled:hover svg {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
   }
 
@@ -523,195 +518,203 @@
     }
 
     .best-sellers__product-link:active .best-sellers__image {
-      transform: scale(1.1);
+      transform: scale(1.04);
     }
   }
 {% endstylesheet %}
 
-{%  javascript  %}
+{% javascript %}
   class BestSellers extends HTMLElement {
-    constructor() {
-      super();
-    }
-
     connectedCallback() {
       this.collectionsContainer = this.querySelector('.best-sellers__collections');
       this.productsContainer = this.querySelector('.best-sellers__products');
-
       this.collectionButtons = this.querySelectorAll('.best-sellers__collection');
       this.productsBlocks = this.querySelectorAll('.best-sellers__product');
 
-      this.overlay = this.querySelector('.best-sellers__overlay');
-      this.popup = this.querySelector('.best-sellers__popup');
-      this.popupCloseButton = this.querySelector('.best-sellers__popup-close');
-
-      this.initEventsListeners();
+      this.initWishlistState();
+      this.initEventListeners();
     }
 
-    initEventsListeners() {
-      if (this.collectionsContainer) {
-        this.collectionsContainer.addEventListener('click', (event) => {
-          const clickedButton = event.target.closest('.best-sellers__collection');
-          if (clickedButton) {
-            const blockId = clickedButton.dataset.blockId;
-            this.showActiveBestSeller(blockId);
-          }
-        });
-      }
+    initWishlistState() {
+      if (!window.ShopTheme?.customer?.loggedIn) return;
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      this.querySelectorAll('.best-sellers__action-wishlist').forEach((btn) => {
+        if (wishlist.includes(btn.dataset.productId)) {
+          btn.classList.add('best-sellers__action-wishlist--active');
+        }
+      });
+    }
 
-      if (this.productsContainer) {
-        this.productsContainer.addEventListener('click', (event) => {
-          const clickedButton = event.target.closest('button');
-          
-          if (clickedButton) {
-            if (clickedButton.classList.contains('best-sellers__action-wishlist')) {
-              const productTitle = clickedButton.dataset.productTitle;
-              const message = `"${productTitle}" has been added to the your wishlist.`
-              this.showPopup(message)
-            }
-            else if (clickedButton.classList.contains('best-sellers__action-add-to-cart')) {
-              const variantId = clickedButton.dataset.variantId;
-              this.addToCart(variantId)
-            }
-          }
-        });
-      }
+    initEventListeners() {
+      this.collectionsContainer?.addEventListener('click', (e) => {
+        const button = e.target.closest('.best-sellers__collection');
+        if (button) this.showActiveBestSeller(button.dataset.blockId);
+      });
 
-      if (this.popupCloseButton) {
-        this.popupCloseButton.addEventListener('click', () => this.closePopup());
-      }
+      this.productsContainer?.addEventListener('click', (e) => {
+        const button = e.target.closest('button');
+        if (!button) return;
 
-      if (this.overlay) {
-        this.overlay.addEventListener('click', () => this.closePopup());
-      }
+        if (button.classList.contains('best-sellers__action-wishlist')) {
+          this.toggleWishlist(button);
+        } else if (button.classList.contains('best-sellers__action-add-to-cart')) {
+          this.addToCart(button);
+        }
+      });
     }
 
     showActiveBestSeller(blockId) {
-      this.collectionButtons.forEach(button => {
-        const isActive = button.dataset.blockId === blockId;
-        button.classList.toggle(
-          'best-sellers__collection--active',
-          isActive
-        );
-        button.setAttribute('aria-selected', isActive);
+      this.collectionButtons.forEach((btn) => {
+        const active = btn.dataset.blockId === blockId;
+        btn.classList.toggle('best-sellers__collection--active', active);
+        btn.setAttribute('aria-selected', active);
       });
-
-      this.productsBlocks.forEach(block => {
-        block.classList.toggle(
-          'best-sellers__product--hidden',
-          block.dataset.blockId !== blockId
-        );
+      this.productsBlocks.forEach((block) => {
+        block.classList.toggle('best-sellers__product--hidden', block.dataset.blockId !== blockId);
       });
     }
 
-    showPopup(message){
-      const popupMessageContainer = this.popup.querySelector('.best-sellers__popup-text');
-      popupMessageContainer.textContent = message;
+    toggleWishlist(button) {
+      const customer = window.ShopTheme?.customer;
 
-      this.popup.classList.add('best-sellers__popup--active');
-      this.overlay.classList.add('best-sellers__overlay--active');
-      document.body.classList.add('best-sellers__popup--open');
+      if (!customer?.loggedIn) {
+        window.ShopTheme?.showToast({
+          title: 'Sign in required',
+          description: 'Please sign in to save items to your wishlist.',
+          type: 'wishlist',
+          action: { text: 'Sign in', url: customer?.loginUrl || '/account/login' },
+        });
+        return;
+      }
+
+      const productId = button.dataset.productId;
+      const productTitle = button.dataset.productTitle;
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const idx = wishlist.indexOf(productId);
+      const adding = idx === -1;
+
+      if (adding) {
+        wishlist.push(productId);
+      } else {
+        wishlist.splice(idx, 1);
+      }
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      button.classList.toggle('best-sellers__action-wishlist--active', adding);
+
+      if (adding) {
+        window.ShopTheme?.showToast({
+          title: `"${productTitle}"`,
+          description: 'Added to your wishlist.',
+          type: 'wishlist',
+        });
+      }
     }
 
-    closePopup(){
-      this.popup.classList.remove('best-sellers__popup--active');
-      this.overlay.classList.remove('best-sellers__overlay--active');
-      document.body.classList.remove('best-sellers__popup--open');
-    }
-
-    async addToCart(variantId){
-      let formData = {
-        'items': [{
-          'id': variantId,
-          'quantity': 1
-        }]
-      };
+    async addToCart(button) {
+      const variantId = button.dataset.variantId;
+      const productTitle = button.dataset.productTitle;
+      if (!variantId) return;
+      button.disabled = true;
 
       try {
-        const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+        const response = await fetch('/cart/add.js', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] }),
         });
 
         if (!response.ok) {
-          throw new Error(`Error response: ${response.status}`);
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.description || `HTTP ${response.status}`);
         }
 
-        const data = await response.json();
-
-        this.showPopup('Product added to cart!');
-      } catch(e) {
-        alert(`Error: ${e}`);
+        await response.json();
+        window.ShopTheme?.showToast({
+          title: `"${productTitle}"`,
+          description: 'Added to your cart.',
+          type: 'cart',
+        });
+        window.ShopTheme?.updateCartCount();
+      } catch (e) {
+        console.error(e);
+        window.ShopTheme?.showToast({
+          title: 'Something went wrong',
+          description: "Couldn't add to cart. Please try again.",
+          type: 'cart',
+        });
+      } finally {
+        button.disabled = false;
       }
     }
   }
 
-  customElements.define("best-sellers", BestSellers);
-
+  customElements.define('best-sellers', BestSellers);
 {% endjavascript %}
 
 {% schema %}
-  {
-    "name": "Best Sellers",
-    "settings": [
-      {
-        "type": "text",
-        "id": "section_label",
-        "label": "Section label"
-      }, {
-        "type": "text",
-        "id": "title",
-        "label": "Title"
-      }
-    ],
-    "max_blocks": 3,
-    "blocks": [
-      {
-        "name": "Collection",
-        "type": "collection_block",
-        "settings": [
-          {
-            "type": "collection",
-            "id": "collection",
-            "label": "Collection",
-            "info": "You must choose a collection."
-          }, {
-            "type": "text",
-            "id": "collection_title",
-            "label": "Collection Title",
-            "info": "If the field is empty, the collection name will be used."
-          }, {
-            "type": "product",
-            "id": "product",
-            "label": "Product",
-            "info": "If no product is selected, the first product from the collection will be displayed."
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Best Sellers",
-        "settings": {
-          "section_label": "Best sellers",
-          "title": "Trending Products"
-        },
-        "blocks": [
-          {
-            "type": "collection_block"
-          }, {
-            "type": "collection_block"
-          }, {
-            "type": "collection_block"
-          }
-        ]
-      }
-    ],
-    "disabled_on": {
-      "groups": ["header", "footer"]
+{
+  "name": "Best Sellers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section label"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
     }
+  ],
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "name": "Collection",
+      "type": "collection_block",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "You must choose a collection."
+        },
+        {
+          "type": "text",
+          "id": "collection_title",
+          "label": "Collection Title",
+          "info": "If the field is empty, the collection name will be used."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "If no product is selected, the first product from the collection will be displayed."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers",
+      "settings": {
+        "section_label": "Best sellers",
+        "title": "Trending Products"
+      },
+      "blocks": [
+        {
+          "type": "collection_block"
+        },
+        {
+          "type": "collection_block"
+        },
+        {
+          "type": "collection_block"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
   }
+}
 {% endschema %}

@@ -1,0 +1,302 @@
+{% stylesheet %}
+  .collections-grid {
+    padding: 80px 16px;
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F8F8;
+    grid-column: 1 / -1;
+  }
+
+  .collections-grid__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .collections-grid__header {
+    margin-bottom: 40px;
+  }
+
+  .collections-grid__label {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9D9D9D;
+    margin-bottom: 8px;
+  }
+
+  .collections-grid__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+    line-height: 1.15;
+  }
+
+  .collections-grid__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .collections-grid__card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: #DCDCDC;
+    display: block;
+    text-decoration: none;
+  }
+
+  .collections-grid__card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .collections-grid__card svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0.25;
+    transition: transform 0.5s ease;
+  }
+
+  .collections-grid__card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 55%);
+    transition: opacity 0.3s ease;
+  }
+
+  .collections-grid__card:hover .collections-grid__card-overlay {
+    opacity: 0.85;
+  }
+
+  .collections-grid__card-name {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .collections-grid__footer {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .collections-grid__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: 1.5px solid #000;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .collections-grid__view-all:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .collections-grid {
+      padding: 80px 24px;
+    }
+
+    .collections-grid__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .collections-grid__title {
+      font-size: 40px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .collections-grid {
+      padding: 100px 48px;
+    }
+
+    .collections-grid__grid {
+      gap: 24px;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .collections-grid__card:hover img,
+    .collections-grid__card:hover svg {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .collections-grid__card:active img,
+    .collections-grid__card:active svg {
+      transform: scale(1.04);
+    }
+  }
+{% endstylesheet %}
+
+<div class="collections-grid">
+  <div class="collections-grid__inner">
+    {%- if section.settings.label != blank or section.settings.heading != blank -%}
+      <div class="collections-grid__header">
+        {%- if section.settings.label != blank -%}
+          <p class="collections-grid__label">{{ section.settings.label }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="collections-grid__title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="collections-grid__grid">
+      {%- if section.settings.show_all_collections -%}
+        {%- for col in collections -%}
+          <a
+            href="{{ col.url }}"
+            class="collections-grid__card">
+            {%- if col.image != blank -%}
+              {{ col.image | image_url: width: 800 | image_tag:
+                loading: 'lazy',
+                widths: '400, 600, 800',
+                sizes: '(min-width: 1440px) 33vw, (min-width: 768px) 50vw, 100vw'
+              }}
+            {%- elsif col.products.first.featured_image != blank -%}
+              {{ col.products.first.featured_image | image_url: width: 800 | image_tag:
+                loading: 'lazy',
+                widths: '400, 600, 800',
+                sizes: '(min-width: 1440px) 33vw, (min-width: 768px) 50vw, 100vw'
+              }}
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag }}
+            {%- endif -%}
+            <div class="collections-grid__card-overlay"></div>
+            <p class="collections-grid__card-name">{{ col.title }}</p>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- assign col = block.settings.collection -%}
+          {%- if col != blank -%}
+            <a
+              href="{{ col.url }}"
+              class="collections-grid__card"
+              {{ block.shopify_attributes }}>
+              {%- if col.image != blank -%}
+                {{ col.image | image_url: width: 800 | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 1440px) 33vw, (min-width: 768px) 50vw, 100vw'
+                }}
+              {%- elsif col.products.first.featured_image != blank -%}
+                {{ col.products.first.featured_image | image_url: width: 800 | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 1440px) 33vw, (min-width: 768px) 50vw, 100vw'
+                }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag }}
+              {%- endif -%}
+              <div class="collections-grid__card-overlay"></div>
+              <p class="collections-grid__card-name">{{ col.title }}</p>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all -%}
+      <div class="collections-grid__footer">
+        <a href="{{ routes.collections_url }}" class="collections-grid__view-all">
+          {{ section.settings.view_all_label | default: 'View all collections' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections Grid",
+  "tag": "section",
+  "class": "section-collections-grid",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find Your Style"
+    },
+    {
+      "type": "header",
+      "content": "Collections source"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_collections",
+      "label": "Show all store collections",
+      "info": "When enabled, all collections from your store are shown automatically. Blocks below are ignored.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "View all link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Button label",
+      "default": "View all collections"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Grid",
+      "blocks": [
+        { "type": "collection_card" },
+        { "type": "collection_card" },
+        { "type": "collection_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

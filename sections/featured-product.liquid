@@ -1,0 +1,341 @@
+{% stylesheet %}
+  .featured-product {
+    display: block;
+    padding: 80px 16px;
+    font-family: 'Inter', sans-serif;
+    background: #f8f8f8;
+    grid-column: 1 / -1;
+  }
+
+  .featured-product__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    gap: 40px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .featured-product__media {
+    flex: 1;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: #dcdcdc;
+  }
+
+  .featured-product__media img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    width: 100%;
+    max-width: 816px;
+    height: auto;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+  }
+
+  .featured-product__media svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0.25;
+  }
+
+  .featured-product__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    align-items: center;
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+
+  .featured-product__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .featured-product__label {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9d9d9d;
+  }
+
+  .featured-product__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    line-height: 1.2;
+  }
+
+  .featured-product__description {
+    font-size: 15px;
+    font-weight: 400;
+    color: #535353;
+    line-height: 1.7;
+  }
+
+  .featured-product__price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .featured-product__price-amount {
+    font-size: 22px;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .featured-product__price-amount--old {
+    font-size: 16px;
+    font-weight: 400;
+    color: #9d9d9d;
+    text-decoration: line-through;
+  }
+
+  .featured-product__price-amount--sale {
+    color: #e41616;
+  }
+
+  .featured-product__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    align-self: flex-start;
+  }
+
+  .featured-product__btn:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+
+  .featured-product__btn:disabled {
+    background: #dcdcdc;
+    cursor: not-allowed;
+    color: #9d9d9d;
+  }
+
+  @media (min-width: 768px) {
+    .featured-product {
+      padding: 80px 24px;
+    }
+
+    .featured-product__inner {
+      flex-direction: row;
+      gap: 60px;
+    }
+
+    .featured-product__title {
+      font-size: 36px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .featured-product {
+      padding: 100px 48px;
+    }
+
+    .featured-product__title {
+      font-size: 44px;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .featured-product__media:hover img {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .featured-product__link:active img {
+      transform: scale(1.04);
+    }
+  }
+{% endstylesheet %}
+
+{%- assign fp = section.settings.product -%}
+
+<featured-product class="featured-product">
+  <div class="featured-product__inner">
+    <div class="featured-product__media">
+      {%- if fp != blank and fp.featured_image != blank -%}
+        <a href="{{ fp.url | url_escape }}" class="featured-product__link">
+          {{
+            fp.featured_image
+            | image_url: width: 900
+            | image_tag:
+              loading: 'lazy',
+              widths: '400, 600, 900',
+              sizes: '(min-width: 768px) 50vw, 100vw'
+          }}
+        </a>
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {%- endif -%}
+
+      {%- if section.settings.badge_text != blank -%}
+        <span class="featured-product__badge">{{ section.settings.badge_text }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="featured-product__info">
+      {%- if section.settings.label != blank -%}
+        <p class="featured-product__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+
+      {%- if fp != blank -%}
+        <h2 class="featured-product__title">{{ fp.title | strip_html | strip }}</h2>
+
+        {%- if fp.description != blank -%}
+          <p class="featured-product__description">
+            {{ fp.description | strip_html | truncate: 160 }}
+          </p>
+        {%- endif -%}
+
+        <div class="featured-product__price">
+          {%- if fp.compare_at_price > fp.price -%}
+            <span class="featured-product__price-amount featured-product__price-amount--sale">
+              {{- fp.price | money -}}
+            </span>
+            <span class="featured-product__price-amount featured-product__price-amount--old">
+              {{- fp.compare_at_price | money -}}
+            </span>
+          {%- else -%}
+            <span class="featured-product__price-amount">{{ fp.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        <button
+          class="featured-product__btn"
+          data-variant-id="{{ fp.selected_or_first_available_variant.id }}"
+          data-product-title="{{ fp.title | strip_html | strip | escape }}"
+          {% unless fp.available %}
+            disabled
+            aria-disabled="true"
+          {% endunless %}
+        >
+          {%- if fp.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
+        </button>
+      {%- else -%}
+        <h2 class="featured-product__title">Select a product in the theme editor</h2>
+      {%- endif -%}
+    </div>
+  </div>
+</featured-product>
+
+{% javascript %}
+  class FeaturedProduct extends HTMLElement {
+    connectedCallback() {
+      const btn = this.querySelector('.featured-product__btn');
+      if (btn) btn.addEventListener('click', () => this.addToCart(btn));
+    }
+
+    async addToCart(btn) {
+      const variantId = btn.dataset.variantId;
+      const productTitle = btn.dataset.productTitle;
+      if (!variantId) return;
+
+      const originalText = btn.textContent.trim();
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: [
+              {
+                id: variantId,
+                quantity: 1,
+              },
+            ],
+          }),
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.description || `HTTP ${response.status}`);
+        }
+
+        await response.json();
+        btn.textContent = originalText;
+        window.ShopTheme?.showToast({
+          title: `"${productTitle}"`,
+          description: 'Added to your cart.',
+          type: 'cart',
+        });
+        window.ShopTheme?.updateCartCount();
+      } catch (e) {
+        console.error(e);
+        btn.textContent = originalText;
+        window.ShopTheme?.showToast({
+          title: 'Something went wrong',
+          description: "Couldn't add to cart. Please try again.",
+          type: 'cart',
+        });
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  }
+
+  customElements.define('featured-product', FeaturedProduct);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Featured Product",
+  "tag": "section",
+  "class": "section-featured-product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Featured Pick"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "info": "e.g. 'New', 'Staff Pick'",
+      "default": "Staff Pick"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product"
+    }
+  ]
+}
+{% endschema %}

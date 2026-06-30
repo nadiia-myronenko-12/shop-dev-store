@@ -9,9 +9,84 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "label": "New Collection · 2026",
+        "heading": "Wear What\nYou Believe In",
+        "subheading": "Mindful jewelry crafted for the ones who lead with intention.",
+        "cta_primary_text": "Shop Now",
+        "cta_primary_url": "/collections",
+        "cta_secondary_text": "View Collections",
+        "cta_secondary_url": "/collections"
+      }
+    },
+    "trust_bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "trust_shipping": {
+          "type": "item",
+          "settings": {
+            "icon": "shipping",
+            "text": "Free shipping on orders $50+"
+          }
+        },
+        "trust_reviews": {
+          "type": "item",
+          "settings": {
+            "icon": "star",
+            "text": "4.9★  —  2,000+ reviews"
+          }
+        },
+        "trust_returns": {
+          "type": "item",
+          "settings": {
+            "icon": "returns",
+            "text": "30-day easy returns"
+          }
+        },
+        "trust_secure": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "text": "Secure checkout"
+          }
+        }
+      },
+      "block_order": [
+        "trust_shipping",
+        "trust_reviews",
+        "trust_returns",
+        "trust_secure"
+      ]
+    },
+    "collections_grid": {
+      "type": "collections-grid",
+      "blocks": {
+        "col_1": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "mantra-rings"
+          }
+        },
+        "col_2": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "charitybands®"
+          }
+        },
+        "col_3": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "inspirational-bracelets"
+          }
+        }
+      },
+      "block_order": ["col_1", "col_2", "col_3"],
+      "settings": {
+        "label": "Shop by Category",
+        "heading": "Find Your Style"
+      }
     },
     "best_sellers_fmJx8H": {
       "type": "best-sellers",
@@ -51,10 +126,32 @@
         "section_label": "Best sellers",
         "title": "Trending Products"
       }
+    },
+    "featured_product": {
+      "type": "featured-product",
+      "settings": {
+        "label": "Featured Pick",
+        "product": "calm-mind-ring",
+        "badge_text": "Staff Pick"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Stay in the Loop",
+        "subheading": "New arrivals, exclusive deals & more.",
+        "placeholder": "Enter your email",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for subscribing!"
+      }
     }
   },
   "order": [
-    "main",
-    "best_sellers_fmJx8H"
+    "hero",
+    "trust_bar",
+    "collections_grid",
+    "best_sellers_fmJx8H",
+    "featured_product",
+    "newsletter"
   ]
 }
