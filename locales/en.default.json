@@ -38,7 +38,8 @@
   },
   "collections": {
     "title": "Collections",
-    "empty": "No collections found."
+    "empty": "No collections found.",
+    "empty_products": "No products found in this collection."
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -47,10 +48,26 @@
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
   },
+  "general": {
+    "products": {
+      "one": "product",
+      "other": "products"
+    },
+    "pagination": "Pagination",
+    "previous_page": "Previous page",
+    "next_page": "Next page"
+  },
   "password": {
     "title": "This shop is private",
     "password": "Password",
     "enter": "Enter"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "add_to_wishlist": "Add to wishlist",
+      "sold_out": "Sold out"
+    }
   },
   "search": {
     "title": "Search",

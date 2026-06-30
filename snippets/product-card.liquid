@@ -1,0 +1,421 @@
+{% doc %}
+  Renders a product card: image (or placeholder), tags, sold-out state,
+  wishlist + add-to-cart actions, title and price. Shared between any
+  section that lists products (best sellers, collection grid, ...).
+
+  @param {product} product - The product to render
+  @param {string} [sizes] - The `sizes` attribute for the responsive image
+
+  @example
+  {% render 'product-card', product: product %}
+  {% render 'product-card', product: product, sizes: '(min-width: 768px) 50vw, 100vw' %}
+{% enddoc %}
+
+{% liquid
+  assign image_sizes = sizes | default: '(min-width: 1440px) 33vw, (min-width: 768px) 50vw, 100vw'
+%}
+
+<product-card class="product-card">
+  <a href="{{ product.url | url_escape }}" class="product-card__link">
+    {%- if product.featured_image != blank -%}
+      {{
+        product.featured_image
+        | image_url: width: 900
+        | image_tag:
+          class: 'product-card__image',
+          loading: 'lazy',
+          widths: '300, 450, 600, 900',
+          sizes: image_sizes,
+          alt: product.featured_image.alt
+        | default: product.title
+        | escape
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'product-card__image' }}
+    {%- endif -%}
+
+    <div class="product-card__info">
+      <span class="product-card__title">{{ product.title | strip_html | strip }}</span>
+
+      <div class="product-card__price-container">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="product-card__price product-card__price--new">
+            {{- product.price | money -}}
+          </span>
+          <span class="product-card__price product-card__price--old">
+            {{- product.compare_at_price | money -}}
+          </span>
+        {%- else -%}
+          <span class="product-card__price">{{- product.price | money -}}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </a>
+
+  {%- if product.tags.size > 0 or product.available == false -%}
+    <div class="product-card__tags">
+      {%- unless product.available -%}
+        <span class="product-card__tag product-card__tag--marked">
+          {{- 'products.product.sold_out' | t -}}
+        </span>
+      {%- endunless -%}
+      {%- for tag in product.tags limit: 3 -%}
+        {%- assign prepared_tag = tag | strip | downcase -%}
+        <span class="product-card__tag{% if prepared_tag == 'sale' %} product-card__tag--marked{% endif %}">
+          {{- tag -}}
+        </span>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="product-card__actions">
+    <button
+      class="product-card__action product-card__action-wishlist"
+      aria-label="{{ 'products.product.add_to_wishlist' | t }}"
+      data-product-id="{{ product.id }}"
+      data-product-title="{{ product.title | escape }}"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M20.84 4.61012C20.3292 4.09912 19.7228 3.69376 19.0554 3.4172C18.3879 3.14064 17.6725 2.99829 16.95 2.99829C16.2275 2.99829 15.5121 3.14064 14.8446 3.4172C14.1772 3.69376 13.5708 4.09912 13.06 4.61012L12 5.67012L10.94 4.61012C9.90831 3.57842 8.50903 2.99883 7.05 2.99883C5.59096 2.99883 4.19169 3.57842 3.16 4.61012C2.1283 5.64181 1.54871 7.04108 1.54871 8.50012C1.54871 9.95915 2.1283 11.3584 3.16 12.3901L4.22 13.4501L12 21.2301L19.78 13.4501L20.84 12.3901C21.351 11.8794 21.7564 11.2729 22.0329 10.6055C22.3095 9.93801 22.4518 9.2226 22.4518 8.50012C22.4518 7.77763 22.3095 7.06222 22.0329 6.39476C21.7564 5.7273 21.351 5.12087 20.84 4.61012V4.61012Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </button>
+    <button
+      class="product-card__action product-card__action-add-to-cart"
+      aria-label="{% if product.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}"
+      data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+      data-product-title="{{ product.title | escape }}"
+      {% unless product.available %}
+        disabled
+        aria-disabled="true"
+      {% endunless %}
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+        <path
+          d="M3 6h18"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+        <path
+          d="M16 10a4 4 0 0 1-8 0"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
+</product-card>
+
+{% stylesheet %}
+  .product-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid #dcdcdc;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .product-card__link {
+    display: block;
+    color: #000;
+    text-decoration: none;
+  }
+
+  .product-card__image {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .product-card__tags {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .product-card__tag {
+    display: inline-flex;
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 18px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .product-card__tag--marked {
+    background-color: #e41616;
+    color: #fff;
+    border: 1px solid #e41616;
+  }
+
+  .product-card__actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .product-card__action {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    color: #000;
+    cursor: pointer;
+  }
+
+  .product-card__action svg {
+    transition: transform 0.5s ease;
+  }
+
+  .product-card__action:disabled {
+    color: #9d9d9d;
+    cursor: not-allowed;
+  }
+
+  .product-card__action-wishlist--active svg path {
+    fill: #e41616;
+    stroke: #e41616;
+  }
+
+  .product-card__info {
+    position: absolute;
+    bottom: 6px;
+    left: 8px;
+    right: 8px;
+    padding: 12px 16px;
+    background-color: #fff;
+    border-radius: 16px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid #dcdcdc;
+  }
+
+  .product-card__title {
+    flex: 1;
+    min-width: 0;
+    line-height: 24px;
+    color: #000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .product-card__price-container {
+    flex-shrink: 0;
+    line-height: 24px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    color: #000;
+  }
+
+  .product-card__price--new {
+    color: #e41616;
+  }
+
+  .product-card__price--old {
+    color: #9d9d9d;
+    text-decoration: line-through;
+    line-height: 22px;
+    font-weight: 400;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .product-card__link:hover .product-card__image {
+      transform: scale(1.04);
+    }
+
+    .product-card__action:enabled:hover {
+      cursor: pointer;
+    }
+
+    .product-card__action:enabled:hover svg {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .product-card__action:enabled:active {
+      transform: scale(1.1);
+    }
+
+    .product-card__link:active .product-card__image {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .product-card__tags {
+      top: 16px;
+      left: 16px;
+    }
+
+    .product-card__actions {
+      top: 16px;
+      right: 16px;
+      gap: 8px;
+    }
+
+    .product-card__action {
+      width: 48px;
+      height: 48px;
+    }
+
+    .product-card__info {
+      bottom: 14px;
+      left: 16px;
+      right: 16px;
+      padding: 24px 32px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class ProductCard extends HTMLElement {
+    connectedCallback() {
+      this.initWishlistState();
+
+      this.addEventListener('click', (e) => {
+        const wishlistBtn = e.target.closest('.product-card__action-wishlist');
+        if (wishlistBtn) {
+          this.toggleWishlist(wishlistBtn);
+          return;
+        }
+
+        const cartBtn = e.target.closest('.product-card__action-add-to-cart');
+        if (cartBtn) this.addToCart(cartBtn);
+      });
+    }
+
+    initWishlistState() {
+      if (!window.ShopTheme?.customer?.loggedIn) return;
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      this.querySelectorAll('.product-card__action-wishlist').forEach((btn) => {
+        if (wishlist.includes(btn.dataset.productId)) {
+          btn.classList.add('product-card__action-wishlist--active');
+        }
+      });
+    }
+
+    toggleWishlist(button) {
+      const customer = window.ShopTheme?.customer;
+
+      if (!customer?.loggedIn) {
+        window.ShopTheme?.showToast({
+          title: 'Sign in required',
+          description: 'Please sign in to save items to your wishlist.',
+          type: 'wishlist',
+          action: { text: 'Sign in', url: customer?.loginUrl || '/account/login' },
+        });
+        return;
+      }
+
+      const productId = button.dataset.productId;
+      const productTitle = button.dataset.productTitle;
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const idx = wishlist.indexOf(productId);
+      const adding = idx === -1;
+
+      if (adding) {
+        wishlist.push(productId);
+      } else {
+        wishlist.splice(idx, 1);
+      }
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      button.classList.toggle('product-card__action-wishlist--active', adding);
+
+      if (adding) {
+        window.ShopTheme?.showToast({
+          title: `"${productTitle}"`,
+          description: 'Added to your wishlist.',
+          type: 'wishlist',
+        });
+      }
+    }
+
+    async addToCart(button) {
+      const variantId = button.dataset.variantId;
+      const productTitle = button.dataset.productTitle;
+      if (!variantId) return;
+      button.disabled = true;
+
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] }),
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.description || `HTTP ${response.status}`);
+        }
+
+        await response.json();
+        window.ShopTheme?.showToast({
+          title: `"${productTitle}"`,
+          description: 'Added to your cart.',
+          type: 'cart',
+        });
+        window.ShopTheme?.updateCartCount();
+      } catch (e) {
+        console.error(e);
+        window.ShopTheme?.showToast({
+          title: 'Something went wrong',
+          description: "Couldn't add to cart. Please try again.",
+          type: 'cart',
+        });
+      } finally {
+        button.disabled = false;
+      }
+    }
+  }
+
+  customElements.define('product-card', ProductCard);
+{% endjavascript %}

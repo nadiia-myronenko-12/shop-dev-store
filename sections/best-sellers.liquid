@@ -72,129 +72,10 @@
               class="best-sellers__product {% unless first_valid_product %} best-sellers__product--hidden {% endunless %}"
               data-block-id="{{ block.id }}"
             >
-              <div class="best-sellers__media-wrapper">
-                <a href="{{ current_product.url | url_escape }}" class="best-sellers__product-link">
-                  {% if current_product and current_product.featured_image != blank %}
-                    <picture class="best-sellers__picture">
-                      <source
-                        media="(max-width: 767px)"
-                        srcset="
-                          {{ current_product.featured_image | image_url: width: 343, height: 343, crop: 'center' }} 1x,
-                          {{ current_product.featured_image | image_url: width: 686, height: 686, crop: 'center' }} 2x
-                        "
-                      >
-                      <source
-                        media="(min-width: 768px)"
-                        srcset="
-                          {{ current_product.featured_image | image_url: width: 816, height: 816, crop: 'center' }} 1x,
-                          {{ current_product.featured_image | image_url: width: 1632, height: 1632, crop: 'center' }} 2x
-                        "
-                      >
-                      <img
-                        class="best-sellers__image"
-                        src="{{ current_product.featured_image | image_url: width: 816, height: 816, crop: 'center' }}"
-                        alt="{{ current_product.featured_image.alt | default: current_product.title | strip_html | strip }}"
-                        loading="lazy"
-                        width="816"
-                        height="816"
-                      >
-                    </picture>
-                  {% else %}
-                    {{ 'image' | placeholder_svg_tag }}
-                  {% endif %}
-                  <div class="best-sellers__product-info">
-                    <span class="best-sellers__product-title">
-                      {{- current_product.title | strip_html | strip -}}
-                    </span>
-
-                    <div class="best-sellers__product-price-container">
-                      {% if current_product.compare_at_price > current_product.price %}
-                        <span class="best-sellers__product-price best-sellers__product-price--new">
-                          {{- current_product.price | money -}}
-                        </span>
-                        <span class="best-sellers__product-price best-sellers__product-price--old">
-                          {{- current_product.compare_at_price | money -}}
-                        </span>
-                      {% else %}
-                        <span class="best-sellers__product-price">
-                          {{- current_product.price | money -}}
-                        </span>
-                      {% endif %}
-                    </div>
-                  </div>
-                </a>
-                {% if current_product.tags.size > 0 %}
-                  <div class="best-sellers__tags">
-                    {% for tag in current_product.tags limit: 3 %}
-                      {% assign prepared_tag = tag | strip | downcase %}
-                      <span class="best-sellers__tag {% if prepared_tag == 'sale' %}best-sellers__tag--marked{% endif %}">
-                        {{- tag -}}
-                      </span>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-                <div class="best-sellers__actions">
-                  <button
-                    class="best-sellers__action best-sellers__action-wishlist"
-                    aria-label="Add to wishlist"
-                    data-product-id="{{ current_product.id }}"
-                    data-product-title="{{ current_product.title }}"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M20.84 4.61012C20.3292 4.09912 19.7228 3.69376 19.0554 3.4172C18.3879 3.14064 17.6725 2.99829 16.95 2.99829C16.2275 2.99829 15.5121 3.14064 14.8446 3.4172C14.1772 3.69376 13.5708 4.09912 13.06 4.61012L12 5.67012L10.94 4.61012C9.90831 3.57842 8.50903 2.99883 7.05 2.99883C5.59096 2.99883 4.19169 3.57842 3.16 4.61012C2.1283 5.64181 1.54871 7.04108 1.54871 8.50012C1.54871 9.95915 2.1283 11.3584 3.16 12.3901L4.22 13.4501L12 21.2301L19.78 13.4501L20.84 12.3901C21.351 11.8794 21.7564 11.2729 22.0329 10.6055C22.3095 9.93801 22.4518 9.2226 22.4518 8.50012C22.4518 7.77763 22.3095 7.06222 22.0329 6.39476C21.7564 5.7273 21.351 5.12087 20.84 4.61012V4.61012Z"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    </svg>
-                  </button>
-                  <button
-                    class="best-sellers__action best-sellers__action-add-to-cart"
-                    aria-label="Add to cart"
-                    data-variant-id="{{ current_product.selected_or_first_available_variant.id }}"
-                    data-product-title="{{ current_product.title | strip_html | strip | escape }}"
-                    {% unless current_product.available %}
-                      disabled
-                      aria-disabled="true"
-                    {% endunless %}
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round" />
-                      <path
-                        d="M3 6h18"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round" />
-                      <path
-                        d="M16 10a4 4 0 0 1-8 0"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+              {% render 'product-card',
+                product: current_product,
+                sizes: '(min-width: 768px) 50vw, 100vw'
+              %}
             </div>
             {% assign first_valid_product = false %}
           {% endif %}
@@ -294,120 +175,6 @@
     display: none;
   }
 
-  .best-sellers__media-wrapper {
-    position: relative;
-    overflow: hidden;
-    border-radius: 16px;
-  }
-
-  .best-sellers__product-link {
-    color: #000000;
-  }
-
-  .best-sellers__image {
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.5s ease;
-  }
-
-  .best-sellers__tags {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
-  }
-
-  .best-sellers__tag {
-    display: inline-flex;
-    padding: 8px 16px;
-    background-color: #ffffff;
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 18px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .best-sellers__tag--marked {
-    background-color: #e41616;
-    color: #ffffff;
-    border: 1px solid #e41616;
-  }
-
-  .best-sellers__actions {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .best-sellers__action {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    border: 1px solid #dcdcdc;
-    border-radius: 12px;
-  }
-
-  .best-sellers__action svg {
-    transition: transform 0.5s ease;
-  }
-
-  .best-sellers__product-info {
-    position: absolute;
-    bottom: 6px;
-    left: 8px;
-    right: 8px;
-    padding: 12px 16px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .best-sellers__product-title {
-    line-height: 24px;
-  }
-
-  .best-sellers__product-price-container {
-    line-height: 24px;
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
-  }
-
-  .best-sellers__product-price--new {
-    color: #e41616;
-  }
-
-  .best-sellers__product-price--old {
-    color: #9d9d9d;
-    text-decoration: line-through;
-    line-height: 22px;
-    font-weight: 400;
-  }
-
-  /* Wishlist active state */
-  .best-sellers__action-wishlist--active svg path {
-    fill: #e41616;
-    stroke: #e41616;
-  }
-
   @media screen and (min-width: 768px) {
     .best-sellers__container {
       flex-direction: row;
@@ -462,29 +229,6 @@
       font-size: 28px;
       line-height: 34px;
     }
-
-    .best-sellers__tags {
-      top: 16px;
-      left: 16px;
-    }
-
-    .best-sellers__actions {
-      top: 16px;
-      right: 16px;
-      gap: 8px;
-    }
-
-    .best-sellers__action {
-      width: 48px;
-      height: 48px;
-    }
-
-    .best-sellers__product-info {
-      bottom: 14px;
-      left: 16px;
-      right: 16px;
-      padding: 24px 32px;
-    }
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -498,28 +242,6 @@
       .best-sellers__collection-arrow {
       transform: translateX(8px);
     }
-
-    .best-sellers__product-link:hover .best-sellers__image {
-      transform: scale(1.04);
-    }
-
-    .best-sellers__action:enabled:hover {
-      cursor: pointer;
-    }
-
-    .best-sellers__action:enabled:hover svg {
-      transform: scale(1.1);
-    }
-  }
-
-  @media (hover: none) and (pointer: coarse) {
-    .best-sellers__action:enabled:active {
-      transform: scale(1.1);
-    }
-
-    .best-sellers__product-link:active .best-sellers__image {
-      transform: scale(1.04);
-    }
   }
 {% endstylesheet %}
 
@@ -527,39 +249,16 @@
   class BestSellers extends HTMLElement {
     connectedCallback() {
       this.collectionsContainer = this.querySelector('.best-sellers__collections');
-      this.productsContainer = this.querySelector('.best-sellers__products');
       this.collectionButtons = this.querySelectorAll('.best-sellers__collection');
       this.productsBlocks = this.querySelectorAll('.best-sellers__product');
 
-      this.initWishlistState();
       this.initEventListeners();
-    }
-
-    initWishlistState() {
-      if (!window.ShopTheme?.customer?.loggedIn) return;
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      this.querySelectorAll('.best-sellers__action-wishlist').forEach((btn) => {
-        if (wishlist.includes(btn.dataset.productId)) {
-          btn.classList.add('best-sellers__action-wishlist--active');
-        }
-      });
     }
 
     initEventListeners() {
       this.collectionsContainer?.addEventListener('click', (e) => {
         const button = e.target.closest('.best-sellers__collection');
         if (button) this.showActiveBestSeller(button.dataset.blockId);
-      });
-
-      this.productsContainer?.addEventListener('click', (e) => {
-        const button = e.target.closest('button');
-        if (!button) return;
-
-        if (button.classList.contains('best-sellers__action-wishlist')) {
-          this.toggleWishlist(button);
-        } else if (button.classList.contains('best-sellers__action-add-to-cart')) {
-          this.addToCart(button);
-        }
       });
     }
 
@@ -572,79 +271,6 @@
       this.productsBlocks.forEach((block) => {
         block.classList.toggle('best-sellers__product--hidden', block.dataset.blockId !== blockId);
       });
-    }
-
-    toggleWishlist(button) {
-      const customer = window.ShopTheme?.customer;
-
-      if (!customer?.loggedIn) {
-        window.ShopTheme?.showToast({
-          title: 'Sign in required',
-          description: 'Please sign in to save items to your wishlist.',
-          type: 'wishlist',
-          action: { text: 'Sign in', url: customer?.loginUrl || '/account/login' },
-        });
-        return;
-      }
-
-      const productId = button.dataset.productId;
-      const productTitle = button.dataset.productTitle;
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      const idx = wishlist.indexOf(productId);
-      const adding = idx === -1;
-
-      if (adding) {
-        wishlist.push(productId);
-      } else {
-        wishlist.splice(idx, 1);
-      }
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
-      button.classList.toggle('best-sellers__action-wishlist--active', adding);
-
-      if (adding) {
-        window.ShopTheme?.showToast({
-          title: `"${productTitle}"`,
-          description: 'Added to your wishlist.',
-          type: 'wishlist',
-        });
-      }
-    }
-
-    async addToCart(button) {
-      const variantId = button.dataset.variantId;
-      const productTitle = button.dataset.productTitle;
-      if (!variantId) return;
-      button.disabled = true;
-
-      try {
-        const response = await fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] }),
-        });
-
-        if (!response.ok) {
-          const err = await response.json().catch(() => ({}));
-          throw new Error(err.description || `HTTP ${response.status}`);
-        }
-
-        await response.json();
-        window.ShopTheme?.showToast({
-          title: `"${productTitle}"`,
-          description: 'Added to your cart.',
-          type: 'cart',
-        });
-        window.ShopTheme?.updateCartCount();
-      } catch (e) {
-        console.error(e);
-        window.ShopTheme?.showToast({
-          title: 'Something went wrong',
-          description: "Couldn't add to cart. Please try again.",
-          type: 'cart',
-        });
-      } finally {
-        button.disabled = false;
-      }
     }
   }
 
