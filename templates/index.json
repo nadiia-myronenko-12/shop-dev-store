@@ -143,16 +143,6 @@
         "product": "hope-band",
         "badge_text": "Staff Pick"
       }
-    },
-    "newsletter": {
-      "type": "newsletter",
-      "settings": {
-        "heading": "Stay in the Loop",
-        "subheading": "New arrivals, exclusive deals & more.",
-        "placeholder": "Enter your email",
-        "button_label": "Subscribe",
-        "success_message": "Thanks for subscribing!"
-      }
     }
   },
   "order": [
@@ -160,7 +150,6 @@
     "trust_bar",
     "collections_grid",
     "best_sellers_fmJx8H",
-    "featured_product",
-    "newsletter"
+    "featured_product"
   ]
 }
