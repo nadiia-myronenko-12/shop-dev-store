@@ -14,7 +14,19 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
+        "show_newsletter": true,
+        "newsletter_heading": "Stay in the Loop",
+        "newsletter_subheading": "New arrivals, exclusive deals & more.",
+        "newsletter_placeholder": "Enter your email",
+        "newsletter_button_label": "Subscribe",
+        "newsletter_success_message": "Thanks for subscribing!",
+        "tagline": "Mindful jewelry crafted for the ones who lead with intention.",
+        "nav_title": "Quick Links",
+        "menu": "footer",
+        "social_instagram": "",
+        "social_facebook": "",
+        "social_tiktok": "",
+        "social_x": "",
         "show_payment_icons": true
       }
     }
