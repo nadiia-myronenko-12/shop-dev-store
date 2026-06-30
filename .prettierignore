@@ -1,0 +1,18 @@
+# Dependencies & build artifacts
+node_modules/
+.shopify/
+release/
+*.zip
+
+# Minified assets
+assets/*.min.js
+assets/*.min.css
+
+# Shopify-managed JSON (editor writes these; reformatting causes merge noise)
+config/*.json
+locales/*.json
+templates/**/*.json
+sections/*-group.json
+
+# Generated / vendor
+assets/*.css.liquid

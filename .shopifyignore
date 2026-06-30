@@ -11,3 +11,11 @@
 #
 # Ignore templates and sections with a regular expression:
 #   /(templates|sections)/.*\.json/
+
+# ── Local dev tooling (never part of the theme) ──
+node_modules/
+.claude/
+package.json
+package-lock.json
+.prettierrc.json
+.prettierignore
