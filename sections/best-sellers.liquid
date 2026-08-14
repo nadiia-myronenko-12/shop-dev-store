@@ -12,6 +12,9 @@
       {% assign first_valid_collection = true %}
       <div class="best-sellers__collections" role="tablist">
         {% for block in section.blocks %}
+          {%- comment %}<locksmith:04ec>{% endcomment -%}
+            {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.product, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+          {%- comment %}</locksmith:04ec>{% endcomment -%}
           {% assign collection_block = block.settings.collection %}
           {% if collection_block != blank %}
             {% if collection_block.products_count > 0 or block.settings.product != blank %}
@@ -62,6 +65,9 @@
     <div class="best-sellers__products">
       {% assign first_valid_product = true %}
       {% for block in section.blocks %}
+        {%- comment %}<locksmith:8c9c>{% endcomment -%}
+          {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: block.settings.product, subject_parent: section, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+        {%- comment %}</locksmith:8c9c>{% endcomment -%}
         {% assign current_collection = block.settings.collection %}
         {% if current_collection != blank %}
           {% if current_collection.products_count > 0 or block.settings.product != blank %}

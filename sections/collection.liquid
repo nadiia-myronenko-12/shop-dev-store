@@ -137,6 +137,9 @@
       {%- if collection.products.size > 0 -%}
         <div class="collection-page__grid">
           {%- for product in collection.products -%}
+            {%- comment %}<locksmith:4839>{% endcomment -%}
+              {%- capture var %}{% render 'locksmith-variables', scope: 'subject', subject: product, subject_parent: collection, variable: 'transparent' %}{% endcapture %}{% if var == "true" %}{% else %}{% continue %}{% endif -%}
+            {%- comment %}</locksmith:4839>{% endcomment -%}
             {% render 'product-card',
               product: product,
               sizes: '(min-width: 1440px) 33vw, (min-width: 768px) 50vw, 100vw'
