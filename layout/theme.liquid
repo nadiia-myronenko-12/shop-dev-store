@@ -1,6 +1,11 @@
+{%- comment %}<locksmith:b2e2>{% endcomment -%}
+  {%- include 'locksmith' -%}
+{%- comment %}</locksmith:b2e2>{% endcomment -%}
+
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
+    {{ locksmith_initializations }}
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
